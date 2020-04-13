@@ -64,7 +64,7 @@ export class NgAudioRecorderService {
     return new Promise((resolve, reject) => {
       this.recorderEnded.pipe(timeout(2000)).subscribe((blob) => {
         this._recorderState = RecorderState.STOPPED;
-        if (outputFormat === OutputFormat.BLOB) {
+        if (outputFormat === OutputFormat.WEBM_BLOB) {
           resolve(blob);
         }
         if (outputFormat === OutputFormat.WEBM_BLOB_URL) {
@@ -109,7 +109,7 @@ export class NgAudioRecorderService {
 
 export enum OutputFormat {
   WEBM_BLOB_URL,
-  BLOB,
+  WEBM_BLOB,
 }
 
 export enum ErrorCase {
