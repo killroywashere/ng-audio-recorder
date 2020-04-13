@@ -5,5 +5,15 @@
     "@angular/common": "^9.0.7",
     "@angular/core": "^9.0.7",
     "tslib": "^1.10.0"
-  }
+  },
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/killroywashere/ng-audio-recorder"
+  },
+  "author": {
+    "name": "Kishin Karra",
+    "email": "kishinkarra@gmail.com",
+    "url": "https://github.com/killroywashere"
+  },
+  "keywords": ["Angular Audio Recorder", "ng audio recorder"]
 }
