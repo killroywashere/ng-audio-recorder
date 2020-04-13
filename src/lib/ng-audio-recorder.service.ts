@@ -3,17 +3,12 @@ import { timeout } from 'rxjs/operators';
 
 declare var MediaRecorder: any;
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NgAudioRecorderService {
-  get recorderState(): RecorderState {
-    return this._recorderState;
-  }
 
   private chunks: Array<any> = [];
   protected recorderEnded = new EventEmitter();
-  recorderError = new EventEmitter<ErrorCase>();
+  public recorderError = new EventEmitter<ErrorCase>();
   // tslint:disable-next-line
   private _recorderState = RecorderState.INITIALIZING;
 
@@ -23,8 +18,13 @@ export class NgAudioRecorderService {
   private recorder: any;
 
 
-  private static getUserConsent() {
+  private static guc() {
     return navigator.mediaDevices.getUserMedia({audio: true});
+  }
+
+
+  getUserContent() {
+    return NgAudioRecorderService.guc();
   }
 
   startRecording() {
@@ -36,7 +36,7 @@ export class NgAudioRecorderService {
       return;
     }
     this._recorderState = RecorderState.INITIALIZING;
-    NgAudioRecorderService.getUserConsent().then((mediaStream) => {
+    NgAudioRecorderService.guc().then((mediaStream) => {
       this.recorder = new MediaRecorder(mediaStream);
       this._recorderState = RecorderState.INITIALIZED;
       this.addListeners();
@@ -45,13 +45,19 @@ export class NgAudioRecorderService {
     });
   }
 
+  pause() {
+    if (this._recorderState === RecorderState.RECORDING) {
+      this.recorder.pause();
+      this._recorderState = RecorderState.PAUSED;
+    }
+  }
+
   resume() {
     if (this._recorderState === RecorderState.PAUSED) {
       this._recorderState = RecorderState.RECORDING;
       this.recorder.resume();
     }
   }
-
 
   stopRecording(outputFormat: OutputFormat) {
     this._recorderState = RecorderState.STOPPING;
@@ -75,21 +81,24 @@ export class NgAudioRecorderService {
     });
   }
 
+  getRecorderState() {
+    return this._recorderState;
+  }
+
   private addListeners() {
     this.recorder.ondataavailable = this.appendToChunks;
     this.recorder.onstop = this.recordingStopped;
   }
 
-  appendToChunks = (event: any) => {
+  private appendToChunks = (event: any) => {
     this.chunks.push(event.data);
-  }
-
-  recordingStopped = (event: any) => {
+  };
+  private recordingStopped = (event: any) => {
     const blob = new Blob(this.chunks, {type: 'audio/webm'});
     this.chunks = [];
     this.recorderEnded.emit(blob);
     this.clear();
-  }
+  };
 
   private clear() {
     this.recorder = null;

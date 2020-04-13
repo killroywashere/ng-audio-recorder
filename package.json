@@ -1,6 +1,6 @@
 {
   "name": "ng-audio-recorder",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "peerDependencies": {
     "@angular/common": "^9.0.7",
     "@angular/core": "^9.0.7",
