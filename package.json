@@ -1,10 +1,11 @@
 {
   "name": "ng-audio-recorder",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "peerDependencies": {
     "@angular/common": "^9.0.7",
     "@angular/core": "^9.0.7",
-    "tslib": "^1.10.0"
+    "tslib": "^1.10.0",
+    "rxjs": "~6.5.4"
   },
   "license": "MIT",
   "repository": {
