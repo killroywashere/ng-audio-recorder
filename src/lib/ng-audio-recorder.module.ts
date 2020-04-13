@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
-import { NgAudioRecorderComponent } from './ng-audio-recorder.component';
-
+import { NgAudioRecorderService } from './ng-audio-recorder.service';
 
 
 @NgModule({
-  declarations: [NgAudioRecorderComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [NgAudioRecorderComponent]
+  exports: [],
+  providers: [
+    NgAudioRecorderService
+  ]
 })
 export class NgAudioRecorderModule { }
