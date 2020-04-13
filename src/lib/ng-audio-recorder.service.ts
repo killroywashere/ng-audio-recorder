@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { timeout } from 'rxjs/operators';
 
 declare var MediaRecorder: any;
 
