@@ -61,7 +61,7 @@ export class NgAudioRecorderService {
   stopRecording(outputFormat: OutputFormat) {
     this._recorderState = RecorderState.STOPPING;
     return new Promise((resolve, reject) => {
-      this.recorderEnded.pipe(timeout(2000)).subscribe((blob) => {
+      this.recorderEnded.subscribe((blob) => {
         this._recorderState = RecorderState.STOPPED;
         if (outputFormat === OutputFormat.WEBM_BLOB) {
           resolve(blob);
