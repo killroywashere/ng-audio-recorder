@@ -8,6 +8,7 @@ export class NgAudioRecorderService {
   private chunks: Array<any> = [];
   protected recorderEnded = new EventEmitter();
   public recorderError = new EventEmitter<ErrorCase>();
+  public recorderState = new EventEmitter<RecorderState>();
   // tslint:disable-next-line
   private _recorderState = RecorderState.INITIALIZING;
 
@@ -38,9 +39,11 @@ export class NgAudioRecorderService {
     NgAudioRecorderService.guc().then((mediaStream) => {
       this.recorder = new MediaRecorder(mediaStream);
       this._recorderState = RecorderState.INITIALIZED;
+      this.recorderState.emit(this._recorderState)
       this.addListeners();
       this.recorder.start();
       this._recorderState = RecorderState.RECORDING;
+      this.recorderState.emit(this._recorderState)
     });
   }
 
@@ -48,12 +51,14 @@ export class NgAudioRecorderService {
     if (this._recorderState === RecorderState.RECORDING) {
       this.recorder.pause();
       this._recorderState = RecorderState.PAUSED;
+      this.recorderState.emit(this._recorderState)
     }
   }
 
   resume() {
     if (this._recorderState === RecorderState.PAUSED) {
       this._recorderState = RecorderState.RECORDING;
+      this.recorderState.emit(this._recorderState)
       this.recorder.resume();
     }
   }
@@ -63,6 +68,7 @@ export class NgAudioRecorderService {
     return new Promise((resolve, reject) => {
       this.recorderEnded.subscribe((blob) => {
         this._recorderState = RecorderState.STOPPED;
+        this.recorderState.emit(this._recorderState)
         if (outputFormat === OutputFormat.WEBM_BLOB) {
           resolve(blob);
         }
@@ -92,6 +98,7 @@ export class NgAudioRecorderService {
   private appendToChunks = (event: any) => {
     this.chunks.push(event.data);
   };
+  
   private recordingStopped = (event: any) => {
     const blob = new Blob(this.chunks, {type: 'audio/webm'});
     this.chunks = [];
@@ -104,7 +111,6 @@ export class NgAudioRecorderService {
     this.chunks = [];
   }
 }
-
 
 export enum OutputFormat {
   WEBM_BLOB_URL,
